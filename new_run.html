@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <title>MK8DX Speedrun Timer</title>
+  <script src="./new_run_files/v1.js"></script>
+</head>
+
+<body><input type="button" onclick="window.location = &#39;/&#39;;" value="Back to Home">
+  <br>
+  <div>
+    <div id="subregion-div"
+      style="position: absolute; height: 536px; width: 956px; z-index: 1000; border: 2px solid #ff0000; pointer-events: none; visibility: hidden">
+    </div>
+    <div id="video-div"></div>
+  </div>
+  <br>
+  Step forward or backward:
+  <br>
+  <input type="button" value="+10s" onclick="stepBy(10000)">
+  <input type="button" value="+5s" onclick="stepBy(5000)">
+  <input type="button" value="+1s" onclick="stepBy(1000)">
+  <input type="button" value="+500ms" onclick="stepBy(500)">
+  <input type="button" value="+100ms" onclick="stepBy(100)">
+  <input type="button" value="+50ms" onclick="stepBy(50)">
+  <input type="button" value="+10ms" onclick="stepBy(10)">
+  <input type="button" value="+5ms" onclick="stepBy(5)">
+  <input type="button" value="+1ms" onclick="stepBy(1)">
+  <br>
+  <input type="button" value="-10s" onclick="stepBy(-10000)">
+  <input type="button" value="-5s" onclick="stepBy(-5000)">
+  <input type="button" value="-1s" onclick="stepBy(-1000)">
+  <input type="button" value="-500ms" onclick="stepBy(-500)">
+  <input type="button" value="-100ms" onclick="stepBy(-100)">
+  <input type="button" value="-50ms" onclick="stepBy(-50)">
+  <input type="button" value="-10ms" onclick="stepBy(-10)">
+  <input type="button" value="-5ms" onclick="stepBy(-5)">
+  <input type="button" value="-1ms" onclick="stepBy(-1)">
+  <br>
+  Current Time (in milliseconds): <span id="current-time">0</span>
+  <br>
+  <form action="https://mk8dx-speedrun-timer.azurewebsites.net/new_run" method="post">
+    <input type="hidden" id="video-id" name="siteVideoId" value="">
+    <input type="hidden" id="video-site" name="site" value="">
+    <div>
+      <input type="hidden" id="start-value" name="startValue" value="">
+      Start Time: <span id="start">Not set</span>
+      <input id="set-start" type="button" value="Set current time as start" onclick="setStart()">
+      <input id="go-to-start" type="button" value="Go to start time" onclick="goToStart()" style="visibility: hidden">
+    </div>
+    <div>
+      <input type="hidden" id="end-value" name="endValue" value="">
+      End Time: <span id="end">Not set</span>
+      <input id="set-end" type="button" value="Set current time as end" onclick="setEnd()">
+      <input id="go-to-end" type="button" value="Go to end time" onclick="goToEnd()" style="visibility: hidden">
+    </div>
+    <div>
+      Total Time: <span id="total-time">Please set a start and end time</span>
+    </div>
+    <div id="preview-div" style="visibility:hidden">
+      <div>
+        Subregion selector:
+        <div>Left: <input type="range" value="0" min="0" max="100" step="0.1" id="left-subregion" name="leftSubregion"
+            oninput="updateSubregionDiv()" style="width: 600px"></div>
+        <div>Right: <input type="range" value="100" min="0" max="100" step="0.1" id="right-subregion"
+            name="rightSubregion" oninput="updateSubregionDiv()" style="width: 600px"></div>
+        <div>Top: <input type="range" value="0" min="0" max="100" step="0.1" id="top-subregion" name="topSubregion"
+            oninput="updateSubregionDiv()" style="width: 600px"></div>
+        <div>Bottom: <input type="range" value="100" min="0" max="100" step="0.1" id="bottom-subregion"
+            name="bottomSubregion" oninput="updateSubregionDiv()" style="width: 600px"></div>
+      </div>
+      <div>
+        CC:
+        <select id="cc-select" name="cc">
+          <option value="150cc">150cc</option>
+          <option value="200cc">200cc</option>
+        </select>
+      </div>
+      <div>
+        How many tracks?:
+        <select id="track-count-select" name="trackCount">
+          <option value="4">4</option>
+          <option value="16">16</option>
+          <option value="32">32</option>
+          <option value="48">48</option>
+        </select>
+      </div>
+      <div>
+        Starting Track:
+        <select id="starting-track-select" name="startingTrack">
+          <option value="mks">Mario Kart Stadium</option>
+          <option value="wp">Water Park</option>
+          <option value="ssc">Sweet Sweet Canyon</option>
+          <option value="tr">Thwomp Ruins</option>
+          <option value="mc">Mario Circuit</option>
+          <option value="th">Toad Harbor</option>
+          <option value="tm">Twisted Mansion</option>
+          <option value="sgf">Shy Guy Falls</option>
+          <option value="sa">Sunshine Airport</option>
+          <option value="ds">Dolphin Shoals</option>
+          <option value="ed">Electrodrome</option>
+          <option value="mw">Mount Wario</option>
+          <option value="cc">Cloudtop Cruise</option>
+          <option value="bdd">Bone-Dry Dunes</option>
+          <option value="bc">Bowser's Castle</option>
+          <option value="rr">Rainbow Road</option>
+          <option value="rmmm">Moo Moo Meadows</option>
+          <option value="mc">Mario Circuit</option>
+          <option value="rccb">Cheep Cheep Beach</option>
+          <option value="rtt">Toad's Turnpike</option>
+          <option value="rddd">Dry Dry Desert</option>
+          <option value="rdp3">Donut Plains 3</option>
+          <option value="rrry">Royal Raceway</option>
+          <option value="rdkj">DK Jungle</option>
+          <option value="rws">Wario Stadium</option>
+          <option value="rsl">Sherbet Land</option>
+          <option value="rmp">Music Park</option>
+          <option value="ryv">Yoshi Valley</option>
+          <option value="rttc">Tick-Tock Clock</option>
+          <option value="rpps">Piranha Plant Slide</option>
+          <option value="rgv">Grumble Volcano</option>
+          <option value="rrrd">N64 Rainbow Road</option>
+          <option value="dyc">Yoshi Circuit</option>
+          <option value="dea">Excitebike Arena</option>
+          <option value="ddd">Dragon Driftway</option>
+          <option value="dmc">Mute City</option>
+          <option value="dbp">Baby Park</option>
+          <option value="dcl">Cheese Land</option>
+          <option value="dww">Wild Woods</option>
+          <option value="dac">Animal Crossing</option>
+          <option value="dwgm">Wario's Gold Mine</option>
+          <option value="drr">SNES Rainbow Road</option>
+          <option value="diio">Ice Ice Outpost</option>
+          <option value="dhc">Hyrule Circuit</option>
+          <option value="dnbc">Neo Bowser City</option>
+          <option value="drir">Ribbon Road</option>
+          <option value="dsbs">Super Bell Subway</option>
+          <option value="dbb">Big Blue</option>
+        </select>
+      </div>
+      <div>
+        <button id="save-run" type="submit" style="visibility: hidden">Save Run</button>
+      </div>
+    </div>
+  </form>
+  <script src="./new_run_files/new_run.js"></script>
+</body>
+
+</html>
